@@ -106,22 +106,34 @@ const sectionHints: Record<string, string> = {
 function useActiveSection() {
   const [id, setId] = useState("home");
   useEffect(() => {
+    let raf = 0;
     const compute = () => {
-      const probe = window.innerHeight * 0.35;
-      let current = "home";
+      raf = 0;
+      const vh = window.innerHeight;
+      // Activation line sits ~45% down the viewport. A section becomes
+      // active only once its top has scrolled past that line — i.e. it's
+      // genuinely entered the viewport and is the dominant one on screen.
+      const line = vh * 0.45;
+      let current = sectionOrder[0];
       for (const sid of sectionOrder) {
         const el = document.getElementById(sid);
         if (!el) continue;
-        if (el.getBoundingClientRect().top - probe <= 0) current = sid;
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= line && rect.bottom > line * 0.5) current = sid;
       }
       setId((prev) => (prev === current ? prev : current));
     };
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(compute);
+    };
     compute();
-    window.addEventListener("scroll", compute, { passive: true });
-    window.addEventListener("resize", compute);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
     return () => {
-      window.removeEventListener("scroll", compute);
-      window.removeEventListener("resize", compute);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
     };
   }, []);
   return id;
