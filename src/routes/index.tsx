@@ -30,9 +30,7 @@ import { Textarea } from "@/components/ui/textarea";
 import srinivas from "@/assets/srinivas.png";
 import plutoSit from "@/assets/pluto-sit.png";
 import plutoRun from "@/assets/pluto-run.png";
-import project1 from "@/assets/project-1.jpg";
-import project2 from "@/assets/project-2.jpg";
-import project3 from "@/assets/project-3.jpg";
+import { projects } from "@/data/projects";
 
 export const Route = createFileRoute("/")({
   head: () => ({
