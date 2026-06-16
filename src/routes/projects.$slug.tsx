@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { ArrowLeft, ArrowUpRight, Calendar, Clock, User, Sparkles, CheckCircle2, Leaf } from "lucide-react";
-import { getProject, projects } from "@/data/projects";
+import { getProject, projects, type Project } from "@/data/projects";
 
 export const Route = createFileRoute("/projects/$slug")({
   loader: ({ params }) => {
