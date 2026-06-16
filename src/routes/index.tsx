@@ -658,39 +658,52 @@ function Projects() {
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {visible.map((p, i) => (
-            <Reveal key={p.title + i} delay={i * 0.06}>
-              <motion.div
-                whileHover={{ y: -6 }}
-                transition={{ duration: 0.3 }}
-                className="group h-full overflow-hidden rounded-2xl border border-border bg-card shadow-soft hover:shadow-lift"
+            <Reveal key={p.slug} delay={i * 0.06}>
+              <Link
+                to="/projects/$slug"
+                params={{ slug: p.slug }}
+                preload="intent"
+                className="block h-full"
               >
-                <div className="aspect-[4/3] overflow-hidden bg-secondary">
-                  <motion.img
-                    src={p.image}
-                    alt={p.title}
-                    loading="lazy"
-                    whileHover={{ scale: 1.06 }}
-                    transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-                <div className="p-5">
-                  <h3 className="font-display text-base">{p.title}</h3>
-                  <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
-                    {p.desc}
-                  </p>
-                  <div className="mt-3 flex flex-wrap gap-1.5">
-                    {p.tags.map((t) => (
-                      <span
-                        key={t}
-                        className="rounded-full bg-secondary px-2 py-0.5 text-[10px] text-foreground/70"
-                      >
-                        {t}
-                      </span>
-                    ))}
+                <motion.div
+                  whileHover={{ y: -6 }}
+                  transition={{ duration: 0.3 }}
+                  className="group h-full overflow-hidden rounded-2xl border border-border bg-card shadow-soft hover:shadow-lift"
+                >
+                  <div className="aspect-[4/3] overflow-hidden bg-secondary">
+                    <motion.img
+                      src={p.image}
+                      alt={p.title}
+                      loading="lazy"
+                      whileHover={{ scale: 1.06 }}
+                      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                      className="h-full w-full object-cover"
+                    />
                   </div>
-                </div>
-              </motion.div>
+                  <div className="p-5">
+                    <div className="flex items-start justify-between gap-2">
+                      <h3 className="font-display text-base">{p.title}</h3>
+                      <ArrowUpRight className="h-4 w-4 flex-shrink-0 text-primary opacity-0 transition-opacity group-hover:opacity-100" />
+                    </div>
+                    <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
+                      {p.desc}
+                    </p>
+                    <div className="mt-3 flex flex-wrap gap-1.5">
+                      {p.tags.map((t) => (
+                        <span
+                          key={t}
+                          className="rounded-full bg-secondary px-2 py-0.5 text-[10px] text-foreground/70"
+                        >
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                    <p className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-primary">
+                      View project <ArrowRight className="h-3 w-3" />
+                    </p>
+                  </div>
+                </motion.div>
+              </Link>
             </Reveal>
           ))}
         </div>
