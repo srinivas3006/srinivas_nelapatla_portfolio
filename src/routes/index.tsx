@@ -83,34 +83,46 @@ function Reveal({
   );
 }
 
+const sectionOrder = [
+  "home",
+  "about",
+  "skills",
+  "work",
+  "experience",
+  "stories",
+  "contact",
+];
+
 const sectionHints: Record<string, string> = {
-  home: "Hi! I'm Pluto 🐾 I'll be your guide today!",
-  about: "Here's a short story about Srinivas 🌱",
-  skills: "These are his core skills 🛠️",
-  work: "These are his real builds 🐾",
-  experience: "This is his journey — learning, building, growing 🌿",
-  stories: "Some things he's exploring lately ✨",
-  contact: "Say hi — he reads every message 💌",
+  home: "Hi! I'm Pluto 🐾 Let me walk you through Srinivas' world.",
+  about: "Here's a glimpse into who he is 🌱",
+  skills: "These are the tools he builds with 🛠️",
+  work: "And these are the things he's actually shipped 🚀",
+  experience: "A short story of how he got here 🌿",
+  stories: "Lately, he's been curious about these ✨",
+  contact: "Liked what you saw? Say hi — he reads every message 💌",
 };
 
 function useActiveSection() {
   const [id, setId] = useState("home");
   useEffect(() => {
-    const ids = Object.keys(sectionHints);
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (visible) setId(visible.target.id);
-      },
-      { threshold: [0.35, 0.6] },
-    );
-    ids.forEach((i) => {
-      const el = document.getElementById(i);
-      if (el) observer.observe(el);
-    });
-    return () => observer.disconnect();
+    const compute = () => {
+      const probe = window.innerHeight * 0.35;
+      let current = "home";
+      for (const sid of sectionOrder) {
+        const el = document.getElementById(sid);
+        if (!el) continue;
+        if (el.getBoundingClientRect().top - probe <= 0) current = sid;
+      }
+      setId((prev) => (prev === current ? prev : current));
+    };
+    compute();
+    window.addEventListener("scroll", compute, { passive: true });
+    window.addEventListener("resize", compute);
+    return () => {
+      window.removeEventListener("scroll", compute);
+      window.removeEventListener("resize", compute);
+    };
   }, []);
   return id;
 }

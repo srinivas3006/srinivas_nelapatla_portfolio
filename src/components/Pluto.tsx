@@ -81,7 +81,7 @@ export function PlutoChat({ hint }: PlutoChatProps) {
         )}
       </AnimatePresence>
 
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         {!open && bubble && (
           <motion.div
             key={currentHint}
