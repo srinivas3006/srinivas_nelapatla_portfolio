@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, useScroll, useTransform, type Variants } from "motion/react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
@@ -30,9 +30,7 @@ import { Textarea } from "@/components/ui/textarea";
 import srinivas from "@/assets/srinivas.png";
 import plutoSit from "@/assets/pluto-sit.png";
 import plutoRun from "@/assets/pluto-run.png";
-import project1 from "@/assets/project-1.jpg";
-import project2 from "@/assets/project-2.jpg";
-import project3 from "@/assets/project-3.jpg";
+import { projects } from "@/data/projects";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -194,36 +192,6 @@ const skills = [
   },
 ];
 
-const projects = [
-  {
-    image: project1,
-    title: "Data Insights Dashboard",
-    desc: "Interactive dashboard for analyzing business data.",
-    tags: ["Python", "Pandas", "Power BI"],
-    cat: "data",
-  },
-  {
-    image: project2,
-    title: "Portfolio Website",
-    desc: "Personal portfolio built with modern UI/UX and animations.",
-    tags: ["React", "Tailwind", "Framer Motion"],
-    cat: "web",
-  },
-  {
-    image: project3,
-    title: "Task Manager API",
-    desc: "REST API for managing tasks with auth & database.",
-    tags: ["Node.js", "Express", "MySQL"],
-    cat: "tools",
-  },
-  {
-    image: project1,
-    title: "E-Commerce UI",
-    desc: "Responsive e-commerce frontend with cart and filters.",
-    tags: ["React", "Context API", "CSS"],
-    cat: "web",
-  },
-];
 
 const filters = [
   { id: "all", label: "All" },
@@ -690,39 +658,52 @@ function Projects() {
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {visible.map((p, i) => (
-            <Reveal key={p.title + i} delay={i * 0.06}>
-              <motion.div
-                whileHover={{ y: -6 }}
-                transition={{ duration: 0.3 }}
-                className="group h-full overflow-hidden rounded-2xl border border-border bg-card shadow-soft hover:shadow-lift"
+            <Reveal key={p.slug} delay={i * 0.06}>
+              <Link
+                to="/projects/$slug"
+                params={{ slug: p.slug }}
+                preload="intent"
+                className="block h-full"
               >
-                <div className="aspect-[4/3] overflow-hidden bg-secondary">
-                  <motion.img
-                    src={p.image}
-                    alt={p.title}
-                    loading="lazy"
-                    whileHover={{ scale: 1.06 }}
-                    transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-                <div className="p-5">
-                  <h3 className="font-display text-base">{p.title}</h3>
-                  <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
-                    {p.desc}
-                  </p>
-                  <div className="mt-3 flex flex-wrap gap-1.5">
-                    {p.tags.map((t) => (
-                      <span
-                        key={t}
-                        className="rounded-full bg-secondary px-2 py-0.5 text-[10px] text-foreground/70"
-                      >
-                        {t}
-                      </span>
-                    ))}
+                <motion.div
+                  whileHover={{ y: -6 }}
+                  transition={{ duration: 0.3 }}
+                  className="group h-full overflow-hidden rounded-2xl border border-border bg-card shadow-soft hover:shadow-lift"
+                >
+                  <div className="aspect-[4/3] overflow-hidden bg-secondary">
+                    <motion.img
+                      src={p.image}
+                      alt={p.title}
+                      loading="lazy"
+                      whileHover={{ scale: 1.06 }}
+                      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                      className="h-full w-full object-cover"
+                    />
                   </div>
-                </div>
-              </motion.div>
+                  <div className="p-5">
+                    <div className="flex items-start justify-between gap-2">
+                      <h3 className="font-display text-base">{p.title}</h3>
+                      <ArrowUpRight className="h-4 w-4 flex-shrink-0 text-primary opacity-0 transition-opacity group-hover:opacity-100" />
+                    </div>
+                    <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
+                      {p.desc}
+                    </p>
+                    <div className="mt-3 flex flex-wrap gap-1.5">
+                      {p.tags.map((t) => (
+                        <span
+                          key={t}
+                          className="rounded-full bg-secondary px-2 py-0.5 text-[10px] text-foreground/70"
+                        >
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                    <p className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-primary">
+                      View project <ArrowRight className="h-3 w-3" />
+                    </p>
+                  </div>
+                </motion.div>
+              </Link>
             </Reveal>
           ))}
         </div>
