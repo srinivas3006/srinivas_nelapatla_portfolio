@@ -56,7 +56,7 @@ export function useProjects() {
         .order("sort_order", { ascending: true })
         .order("created_at", { ascending: false });
       if (error) throw error;
-      return (data ?? []) as DbProject[];
+      return (data ?? []) as unknown as DbProject[];
     },
     staleTime: 60_000,
   });
@@ -72,7 +72,7 @@ export function useProject(slug: string) {
         .eq("slug", slug)
         .maybeSingle();
       if (error) throw error;
-      return (data as DbProject) ?? null;
+      return (data as unknown as DbProject) ?? null;
     },
     staleTime: 60_000,
   });
