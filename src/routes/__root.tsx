@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { Toaster } from "sonner";
 
 function NotFoundComponent() {
   return (
@@ -78,17 +79,35 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "srinivas_nelapatla" },
-      { name: "description", content: "A premium, green-themed personal portfolio for a full-stack developer, guided by an intelligent assistant named Pluto." },
-      { name: "author", content: "Lovable" },
+      {
+        name: "description",
+        content:
+          "A premium, green-themed personal portfolio for a full-stack developer, guided by an intelligent assistant named Pluto.",
+      },
+      { name: "author", content: "Srinivas Nelapatla" },
       { property: "og:title", content: "srinivas_nelapatla" },
-      { property: "og:description", content: "A premium, green-themed personal portfolio for a full-stack developer, guided by an intelligent assistant named Pluto." },
+      {
+        property: "og:description",
+        content:
+          "A premium, green-themed personal portfolio for a full-stack developer, guided by an intelligent assistant named Pluto.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:site", content: "@srinivas" },
       { name: "twitter:title", content: "srinivas_nelapatla" },
-      { name: "twitter:description", content: "A premium, green-themed personal portfolio for a full-stack developer, guided by an intelligent assistant named Pluto." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/52a75170-ed60-4abe-a155-d23a19064c67/id-preview-56b1af1a--735de7fd-7157-44af-a675-5258a62a84ff.lovable.app-1781071008560.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/52a75170-ed60-4abe-a155-d23a19064c67/id-preview-56b1af1a--735de7fd-7157-44af-a675-5258a62a84ff.lovable.app-1781071008560.png" },
+      {
+        name: "twitter:description",
+        content:
+          "A premium, green-themed personal portfolio for a full-stack developer, guided by an intelligent assistant named Pluto.",
+      },
+      {
+        property: "og:image",
+        content: "/og-image.png",
+      },
+      {
+        name: "twitter:image",
+        content: "/og-image.png",
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -127,6 +146,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
+      <Toaster position="top-center" richColors />
     </QueryClientProvider>
   );
 }

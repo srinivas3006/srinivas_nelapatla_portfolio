@@ -19,8 +19,8 @@ import { Textarea } from "@/components/ui/textarea";
 import defaultSrinivas from "@/assets/srinivas.png";
 import plutoSit from "@/assets/pluto-sit.png";
 import plutoRun from "@/assets/pluto-run.png";
-import { usePortfolioContent, useProjects, type DbProject } from "@/lib/use-portfolio";
-import { DEFAULTS, type PortfolioContent } from "@/lib/portfolio-content";
+import { usePortfolioContent, useProjects } from "@/lib/use-portfolio";
+import { DEFAULTS, type PortfolioContent, type DbProject } from "@/lib/portfolio-content";
 import { getIcon } from "@/lib/icon-map";
 
 export const Route = createFileRoute("/")({
@@ -47,7 +47,15 @@ const fadeUp: Variants = {
   show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } },
 };
 
-function Reveal({ children, delay = 0, className }: { children: ReactNode; delay?: number; className?: string }) {
+function Reveal({
+  children,
+  delay = 0,
+  className,
+}: {
+  children: ReactNode;
+  delay?: number;
+  className?: string;
+}) {
   return (
     <motion.div
       variants={fadeUp}
@@ -124,10 +132,18 @@ function DecorLeaves() {
   const y = useTransform(scrollYProgress, [0, 1], [0, -120]);
   return (
     <>
-      <motion.div style={{ y }} aria-hidden className="pointer-events-none fixed left-0 top-1/3 z-0 opacity-50">
+      <motion.div
+        style={{ y }}
+        aria-hidden
+        className="pointer-events-none fixed left-0 top-1/3 z-0 opacity-50"
+      >
         <Leaf className="h-24 w-24 -rotate-45 text-primary/15" strokeWidth={1} />
       </motion.div>
-      <motion.div style={{ y }} aria-hidden className="pointer-events-none fixed right-2 bottom-10 z-0 opacity-50">
+      <motion.div
+        style={{ y }}
+        aria-hidden
+        className="pointer-events-none fixed right-2 bottom-10 z-0 opacity-50"
+      >
         <Leaf className="h-20 w-20 rotate-45 text-primary/15" strokeWidth={1} />
       </motion.div>
     </>
@@ -162,12 +178,18 @@ function Nav({ active }: { active: string }) {
             >
               {l.label}
               {active === l.id && (
-                <motion.span layoutId="nav-underline" className="absolute -bottom-1.5 left-0 right-0 mx-auto h-[2px] w-5 rounded-full bg-primary" />
+                <motion.span
+                  layoutId="nav-underline"
+                  className="absolute -bottom-1.5 left-0 right-0 mx-auto h-[2px] w-5 rounded-full bg-primary"
+                />
               )}
             </a>
           ))}
         </nav>
-        <a href="#contact" className="hidden items-center gap-2 rounded-full border border-primary/40 bg-primary/5 px-4 py-2 text-xs font-medium text-primary transition-colors hover:bg-primary hover:text-primary-foreground sm:inline-flex">
+        <a
+          href="#contact"
+          className="hidden items-center gap-2 rounded-full border border-primary/40 bg-primary/5 px-4 py-2 text-xs font-medium text-primary transition-colors hover:bg-primary hover:text-primary-foreground sm:inline-flex"
+        >
           Let's Connect <ArrowUpRight className="h-3.5 w-3.5" />
         </a>
       </div>
@@ -189,8 +211,7 @@ function Hero({ hero }: { hero: PortfolioContent["hero"] }) {
           </Reveal>
           <Reveal delay={0.05}>
             <h1 className="font-display text-5xl leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl">
-              {hero.headlinePrefix}{" "}
-              <em className="italic text-primary">{hero.italicWords[0]}</em>
+              {hero.headlinePrefix} <em className="italic text-primary">{hero.italicWords[0]}</em>
               <br />
               <em className="italic text-primary">{hero.italicWords[1]}</em> &amp;
               <br />
@@ -204,13 +225,24 @@ function Hero({ hero }: { hero: PortfolioContent["hero"] }) {
           </Reveal>
           <Reveal delay={0.25}>
             <div className="mt-8 flex flex-wrap items-center gap-4">
-              <a href={hero.primaryCta.href} className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5">
+              <a
+                href={hero.primaryCta.href}
+                className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
+              >
                 {hero.primaryCta.label}
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </a>
-              <a href={hero.secondaryCta.href} className="inline-flex items-center gap-2 text-sm font-medium text-foreground/80 hover:text-foreground">
-                {hero.secondaryCta.label} <Download className="h-4 w-4" />
-              </a>
+              {hero.secondaryCta && (
+                <a
+                  href={hero.secondaryCta.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  download="srinivas_nelapatla.pdf"
+                  className="inline-flex items-center gap-2 text-sm font-medium text-foreground/80 hover:text-foreground"
+                >
+                  {hero.secondaryCta.label} <Download className="h-4 w-4" />
+                </a>
+              )}
             </div>
           </Reveal>
           <div className="mt-16 hidden flex-col items-center gap-2 text-xs text-muted-foreground sm:flex">
@@ -227,7 +259,11 @@ function Hero({ hero }: { hero: PortfolioContent["hero"] }) {
             className="relative mx-auto aspect-[4/5] w-full max-w-md"
           >
             <div className="absolute inset-0 rounded-[50%_50%_45%_45%/55%_55%_45%_45%] bg-gradient-to-b from-accent/40 to-primary/20" />
-            <img src={img} alt="Srinivas Nelapatla" className="relative h-full w-full object-contain object-bottom" />
+            <img
+              src={img}
+              alt="Srinivas Nelapatla"
+              className="relative h-full w-full object-contain object-bottom"
+            />
           </motion.div>
 
           {hero.exploring.length > 0 && (
@@ -235,7 +271,7 @@ function Hero({ hero }: { hero: PortfolioContent["hero"] }) {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.6, duration: 0.7 }}
-              className="absolute right-0 top-12 hidden rounded-2xl bg-card p-4 shadow-lift ring-1 ring-border/60 sm:block"
+              className="absolute -right-6 lg:-right-16 top-16 hidden rounded-2xl bg-card p-4 shadow-lift ring-1 ring-border/60 sm:block z-10"
             >
               <p className="mb-3 flex items-center gap-2 text-xs font-medium">
                 <Rocket className="h-3.5 w-3.5 text-primary" />
@@ -251,21 +287,7 @@ function Hero({ hero }: { hero: PortfolioContent["hero"] }) {
             </motion.div>
           )}
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9, duration: 0.8 }}
-            className="absolute -bottom-6 right-0 hidden w-44 sm:block"
-          >
-            <motion.div animate={{ y: [0, -6, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}>
-              <img src={plutoSit} alt="Pluto" className="h-auto w-full" />
-            </motion.div>
-            <div className="absolute -top-4 -left-28 w-52 rounded-2xl bg-card p-3 shadow-lift ring-1 ring-border/60">
-              <p className="text-xs font-medium">{hero.plutoIntroTitle}</p>
-              <p className="mt-0.5 text-xs text-muted-foreground">{hero.plutoIntroSub}</p>
-              <div className="absolute -bottom-1.5 right-6 h-3 w-3 rotate-45 bg-card" />
-            </div>
-          </motion.div>
+
         </div>
       </div>
     </section>
@@ -304,11 +326,16 @@ function About({ about }: { about: PortfolioContent["about"] }) {
             </Reveal>
             <Reveal delay={0.1}>
               <div className="mt-6 space-y-4 text-[15px] leading-relaxed text-foreground/80">
-                {about.paragraphs.map((p, i) => <p key={i}>{p}</p>)}
+                {about.paragraphs.map((p, i) => (
+                  <p key={i}>{p}</p>
+                ))}
               </div>
             </Reveal>
             <Reveal delay={0.2}>
-              <a href="#work" className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5">
+              <a
+                href="#work"
+                className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
+              >
                 More About Me <ArrowRight className="h-4 w-4" />
               </a>
             </Reveal>
@@ -338,7 +365,9 @@ function About({ about }: { about: PortfolioContent["about"] }) {
                 <p className="font-display italic text-lg leading-snug whitespace-pre-line">
                   "{about.quote}"
                 </p>
-                <p className="mt-3 text-right font-display italic text-sm opacity-80">— {about.quoteAuthor}</p>
+                <p className="mt-3 text-right font-display italic text-sm opacity-80">
+                  — {about.quoteAuthor}
+                </p>
               </div>
               <Leaf className="absolute -right-2 -bottom-2 h-24 w-24 rotate-12 text-primary-foreground/10" />
             </div>
@@ -365,7 +394,10 @@ function Skills({ skills }: { skills: PortfolioContent["skills"] }) {
             const Icon = getIcon(s.icon);
             return (
               <Reveal key={s.title + i} delay={i * 0.06}>
-                <motion.div whileHover={{ y: -4 }} className="h-full rounded-2xl border border-border bg-card p-5 shadow-soft transition-shadow hover:shadow-lift">
+                <motion.div
+                  whileHover={{ y: -4 }}
+                  className="h-full rounded-2xl border border-border bg-card p-5 shadow-soft transition-shadow hover:shadow-lift"
+                >
                   <div className="mb-4 flex items-center gap-3">
                     <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
                       <Icon className="h-4 w-4" />
@@ -409,7 +441,9 @@ const filters = [
 
 function Projects({ projects }: { projects: DbProject[] }) {
   const [filter, setFilter] = useState("all");
-  const visible = projects.filter((p) => p.is_published).filter((p) => filter === "all" || p.category === filter);
+  const visible = projects
+    .filter((p) => p.is_published)
+    .filter((p) => filter === "all" || p.category === filter);
 
   return (
     <section id="work" className="py-24">
@@ -445,11 +479,27 @@ function Projects({ projects }: { projects: DbProject[] }) {
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {visible.map((p, i) => (
               <Reveal key={p.id} delay={i * 0.06}>
-                <Link to="/projects/$slug" params={{ slug: p.slug }} preload="intent" className="block h-full">
-                  <motion.div whileHover={{ y: -6 }} transition={{ duration: 0.3 }} className="group h-full overflow-hidden rounded-2xl border border-border bg-card shadow-soft hover:shadow-lift">
+                <Link
+                  to="/projects/$slug"
+                  params={{ slug: p.slug }}
+                  preload="intent"
+                  className="block h-full"
+                >
+                  <motion.div
+                    whileHover={{ y: -6 }}
+                    transition={{ duration: 0.3 }}
+                    className="group h-full overflow-hidden rounded-2xl border border-border bg-card shadow-soft hover:shadow-lift"
+                  >
                     <div className="aspect-[4/3] overflow-hidden bg-secondary">
                       {p.image ? (
-                        <motion.img src={p.image} alt={p.title} loading="lazy" whileHover={{ scale: 1.06 }} transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }} className="h-full w-full object-cover" />
+                        <motion.img
+                          src={p.image}
+                          alt={p.title}
+                          loading="lazy"
+                          whileHover={{ scale: 1.06 }}
+                          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                          className="h-full w-full object-cover"
+                        />
                       ) : (
                         <div className="h-full w-full bg-gradient-to-br from-primary/10 to-accent/20" />
                       )}
@@ -459,10 +509,17 @@ function Projects({ projects }: { projects: DbProject[] }) {
                         <h3 className="font-display text-base">{p.title}</h3>
                         <ArrowUpRight className="h-4 w-4 flex-shrink-0 text-primary opacity-0 transition-opacity group-hover:opacity-100" />
                       </div>
-                      <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">{p.description}</p>
+                      <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
+                        {p.description}
+                      </p>
                       <div className="mt-3 flex flex-wrap gap-1.5">
-                        {p.tags.map((t) => (
-                          <span key={t} className="rounded-full bg-secondary px-2 py-0.5 text-[10px] text-foreground/70">{t}</span>
+                        {p.tags.map((t: string) => (
+                          <span
+                            key={t}
+                            className="rounded-full bg-secondary px-2 py-0.5 text-[10px] text-foreground/70"
+                          >
+                            {t}
+                          </span>
                         ))}
                       </div>
                       <p className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-primary">
@@ -499,11 +556,16 @@ function Experience({ journey }: { journey: PortfolioContent["journey"] }) {
               return (
                 <Reveal key={j.title + i} delay={i * 0.08}>
                   <div className="relative">
-                    <motion.div whileHover={{ scale: 1.05 }} className="relative z-10 flex h-14 w-14 items-center justify-center rounded-full bg-card shadow-soft ring-2 ring-primary/30">
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      className="relative z-10 flex h-14 w-14 items-center justify-center rounded-full bg-card shadow-soft ring-2 ring-primary/30"
+                    >
                       <Icon className="h-6 w-6 text-primary" />
                     </motion.div>
                     <p className="mt-5 font-display text-lg">{j.title}</p>
-                    <p className="mt-0.5 text-xs uppercase tracking-wider text-primary/80">{j.year}</p>
+                    <p className="mt-0.5 text-xs uppercase tracking-wider text-primary/80">
+                      {j.year}
+                    </p>
                     <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{j.body}</p>
                   </div>
                 </Reveal>
@@ -531,7 +593,10 @@ function Stories({ stories }: { stories: PortfolioContent["stories"] }) {
             const Icon = getIcon(e.icon);
             return (
               <Reveal key={e.title + i} delay={i * 0.08}>
-                <motion.div whileHover={{ y: -4 }} className="h-full rounded-2xl border border-border bg-gradient-to-br from-card to-accent/10 p-7 shadow-soft">
+                <motion.div
+                  whileHover={{ y: -4 }}
+                  className="h-full rounded-2xl border border-border bg-gradient-to-br from-card to-accent/10 p-7 shadow-soft"
+                >
                   <Icon className="mb-4 h-6 w-6 text-primary" />
                   <h3 className="font-display text-xl">{e.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{e.desc}</p>
@@ -570,10 +635,22 @@ function Contact({ contact }: { contact: PortfolioContent["contact"] }) {
           >
             <div className="grid gap-4 sm:grid-cols-2">
               <Input placeholder="Your name" required className="h-12 rounded-xl bg-background" />
-              <Input type="email" placeholder="Email" required className="h-12 rounded-xl bg-background" />
+              <Input
+                type="email"
+                placeholder="Email"
+                required
+                className="h-12 rounded-xl bg-background"
+              />
             </div>
-            <Textarea placeholder="Tell me about your project…" rows={5} className="rounded-xl bg-background" />
-            <Button type="submit" className="mt-2 h-12 rounded-full bg-primary text-primary-foreground hover:bg-primary/90">
+            <Textarea
+              placeholder="Tell me about your project…"
+              rows={5}
+              className="rounded-xl bg-background"
+            />
+            <Button
+              type="submit"
+              className="mt-2 h-12 rounded-full bg-primary text-primary-foreground hover:bg-primary/90"
+            >
               Send message
             </Button>
           </form>
@@ -581,15 +658,24 @@ function Contact({ contact }: { contact: PortfolioContent["contact"] }) {
 
         <Reveal delay={0.25}>
           <div className="mt-8 flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
-            <a href={`mailto:${contact.email}`} className="inline-flex items-center gap-2 transition-colors hover:text-foreground">
+            <a
+              href={`mailto:${contact.email}`}
+              className="inline-flex items-center gap-2 transition-colors hover:text-foreground"
+            >
               <Mail className="h-4 w-4" />
               <span>{contact.email}</span>
             </a>
-            <a href={contact.github} className="inline-flex items-center gap-2 transition-colors hover:text-foreground">
+            <a
+              href={contact.github}
+              className="inline-flex items-center gap-2 transition-colors hover:text-foreground"
+            >
               <Github className="h-4 w-4" />
               <span>GitHub</span>
             </a>
-            <a href={contact.linkedin} className="inline-flex items-center gap-2 transition-colors hover:text-foreground">
+            <a
+              href={contact.linkedin}
+              className="inline-flex items-center gap-2 transition-colors hover:text-foreground"
+            >
               <Linkedin className="h-4 w-4" />
               <span>LinkedIn</span>
             </a>

@@ -3,6 +3,28 @@
 // keyed by section name; rendered pages merge defaults <- DB overrides.
 
 import srinivas from "@/assets/srinivas.png";
+import { PROJECTS } from "./projects-data";
+
+export type DbProject = {
+  id: string;
+  slug: string;
+  title: string;
+  description: string;
+  image: string;
+  tags: string[];
+  category: string;
+  year: string;
+  role: string;
+  timeline: string;
+  overview: string;
+  problem: string;
+  solution: string;
+  highlights: string[];
+  stack: string[];
+  links: { label: string; href: string }[];
+  sort_order: number;
+  is_published: boolean;
+};
 
 export type CtaLink = { label: string; href: string };
 
@@ -13,7 +35,7 @@ export type HeroContent = {
   headlineSuffix: string;
   subhead: string;
   primaryCta: CtaLink;
-  secondaryCta: CtaLink;
+  secondaryCta?: CtaLink;
   exploring: string[];
   plutoIntroTitle: string;
   plutoIntroSub: string;
@@ -71,6 +93,7 @@ export type PortfolioContent = {
   stories: StoryItem[];
   contact: ContactContent;
   hints: SectionHints;
+  projects: DbProject[];
 };
 
 // ─────────── defaults ───────────
@@ -83,7 +106,6 @@ export const DEFAULT_HERO: HeroContent = {
   subhead:
     "A Computer Science Engineer passionate about creating impact through code and creativity.",
   primaryCta: { label: "Explore My Work", href: "#work" },
-  secondaryCta: { label: "Download Resume", href: "#" },
   exploring: ["Backend Systems", "Data Analysis", "Scalable Web Apps"],
   plutoIntroTitle: "Hi! I'm Pluto 🐾",
   plutoIntroSub: "I'll be your guide today!",
@@ -239,14 +261,28 @@ export const DEFAULTS: PortfolioContent = {
   stories: DEFAULT_STORIES,
   contact: DEFAULT_CONTACT,
   hints: DEFAULT_HINTS,
+  projects: PROJECTS,
 };
 
 export const DEFAULT_HERO_IMAGE = srinivas;
 
 // Allowed icon names used across content. Keeps the bundle deterministic.
 export const ICON_OPTIONS = [
-  "Code2", "Database", "LineChart", "Layers", "Wrench",
-  "GraduationCap", "Sprout", "Sparkles", "Briefcase", "Target",
-  "BookOpen", "Rocket", "Leaf", "Mail", "Github", "Linkedin",
+  "Code2",
+  "Database",
+  "LineChart",
+  "Layers",
+  "Wrench",
+  "GraduationCap",
+  "Sprout",
+  "Sparkles",
+  "Briefcase",
+  "Target",
+  "BookOpen",
+  "Rocket",
+  "Leaf",
+  "Mail",
+  "Github",
+  "Linkedin",
 ] as const;
 export type IconName = (typeof ICON_OPTIONS)[number];

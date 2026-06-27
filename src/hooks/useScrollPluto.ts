@@ -4,9 +4,7 @@ export function useScrollPluto(defaultMsg: string) {
   const [message, setMessage] = useState(defaultMsg);
 
   useEffect(() => {
-    const sections = Array.from(
-      document.querySelectorAll<HTMLElement>("[data-pluto-hint]"),
-    );
+    const sections = Array.from(document.querySelectorAll<HTMLElement>("[data-pluto-hint]"));
     if (!sections.length) return;
     const observer = new IntersectionObserver(
       (entries) => {

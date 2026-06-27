@@ -1,20 +1,31 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { motion } from "motion/react";
-import { ArrowLeft, ArrowUpRight, Calendar, Clock, User, Sparkles, CheckCircle2, Leaf, Loader2 } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowUpRight,
+  Calendar,
+  Clock,
+  User,
+  Sparkles,
+  CheckCircle2,
+  Leaf,
+  Loader2,
+} from "lucide-react";
 import { useProject, useProjects } from "@/lib/use-portfolio";
 
 export const Route = createFileRoute("/projects/$slug")({
   head: () => ({
-    meta: [
-      { title: "Project — Srinivas Nelapatla" },
-    ],
+    meta: [{ title: "Project — Srinivas Nelapatla" }],
   }),
   notFoundComponent: () => (
     <div className="flex min-h-screen items-center justify-center px-6 text-center">
       <div>
         <p className="font-display text-3xl">Project not found</p>
         <p className="mt-2 text-muted-foreground">It may have moved or been renamed.</p>
-        <Link to="/" className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm text-primary-foreground">
+        <Link
+          to="/"
+          className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm text-primary-foreground"
+        >
           <ArrowLeft className="h-4 w-4" /> Back home
         </Link>
       </div>
@@ -24,7 +35,10 @@ export const Route = createFileRoute("/projects/$slug")({
     <div className="flex min-h-screen items-center justify-center px-6 text-center">
       <div>
         <p className="font-display text-3xl">Something went wrong</p>
-        <button onClick={reset} className="mt-4 rounded-full bg-primary px-5 py-2 text-sm text-primary-foreground">
+        <button
+          onClick={reset}
+          className="mt-4 rounded-full bg-primary px-5 py-2 text-sm text-primary-foreground"
+        >
           Try again
         </button>
       </div>
@@ -48,28 +62,46 @@ function ProjectDetail() {
   if (error) throw error;
   if (!project) throw notFound();
 
-  const others = (allProjects ?? []).filter((p) => p.slug !== project.slug && p.is_published).slice(0, 3);
+  const others = (allProjects ?? [])
+    .filter((p) => p.slug !== project.slug && p.is_published)
+    .slice(0, 3);
 
-  const catLabel = project.category === "web" ? "Web App" : project.category === "data" ? "Data Project" : "Tool";
+  const catLabel =
+    project.category === "web" ? "Web App" : project.category === "data" ? "Data Project" : "Tool";
 
   return (
     <div className="relative min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-4">
-          <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
+          >
             <ArrowLeft className="h-4 w-4" /> Back to portfolio
           </Link>
-          <Link to="/" hash="contact" className="hidden items-center gap-2 rounded-full border border-primary/40 bg-primary/5 px-4 py-2 text-xs text-primary hover:bg-primary hover:text-primary-foreground sm:inline-flex">
+          <Link
+            to="/"
+            hash="contact"
+            className="hidden items-center gap-2 rounded-full border border-primary/40 bg-primary/5 px-4 py-2 text-xs text-primary hover:bg-primary hover:text-primary-foreground sm:inline-flex"
+          >
             Let's talk <ArrowUpRight className="h-3.5 w-3.5" />
           </Link>
         </div>
       </header>
 
       <article className="mx-auto max-w-5xl px-6 pb-24 pt-12">
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
           <p className="text-xs uppercase tracking-[0.3em] text-primary">✦ {catLabel}</p>
-          <h1 className="mt-3 font-display text-4xl leading-tight tracking-tight sm:text-6xl">{project.title}</h1>
-          {project.overview && <p className="mt-5 max-w-2xl text-lg text-foreground/75">{project.overview}</p>}
+          <h1 className="mt-3 font-display text-4xl leading-tight tracking-tight sm:text-6xl">
+            {project.title}
+          </h1>
+          {project.overview && (
+            <p className="mt-5 max-w-2xl text-lg text-foreground/75">{project.overview}</p>
+          )}
 
           <div className="mt-8 grid gap-4 sm:grid-cols-3">
             {project.year && <Meta icon={Calendar} label="Year" value={project.year} />}
@@ -85,7 +117,11 @@ function ProjectDetail() {
             transition={{ duration: 0.8, delay: 0.1 }}
             className="mt-12 overflow-hidden rounded-3xl border border-border bg-card shadow-lift"
           >
-            <img src={project.image} alt={project.title} className="aspect-[16/9] w-full object-cover" />
+            <img
+              src={project.image}
+              alt={project.title}
+              className="aspect-[16/9] w-full object-cover"
+            />
           </motion.div>
         )}
 
@@ -117,7 +153,12 @@ function ProjectDetail() {
                 </p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {project.stack.map((s) => (
-                    <span key={s} className="rounded-full bg-secondary px-3 py-1 text-xs text-foreground/80">{s}</span>
+                    <span
+                      key={s}
+                      className="rounded-full bg-secondary px-3 py-1 text-xs text-foreground/80"
+                    >
+                      {s}
+                    </span>
                   ))}
                 </div>
               </div>
@@ -128,7 +169,11 @@ function ProjectDetail() {
                 <p className="text-xs uppercase tracking-wider text-primary">Links</p>
                 <div className="mt-3 space-y-2">
                   {project.links.map((l) => (
-                    <a key={l.label} href={l.href} className="group flex items-center justify-between rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-foreground/85 hover:border-primary/40">
+                    <a
+                      key={l.label}
+                      href={l.href}
+                      className="group flex items-center justify-between rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-foreground/85 hover:border-primary/40"
+                    >
                       {l.label}
                       <ArrowUpRight className="h-4 w-4 text-primary transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                     </a>
@@ -138,7 +183,9 @@ function ProjectDetail() {
             )}
 
             <div className="relative overflow-hidden rounded-2xl bg-primary p-6 text-primary-foreground shadow-lift">
-              <p className="font-display italic text-lg leading-snug">"Code with purpose. Build with passion."</p>
+              <p className="font-display italic text-lg leading-snug">
+                "Code with purpose. Build with passion."
+              </p>
               <p className="mt-2 text-xs opacity-80">— Srinivas</p>
               <Leaf className="absolute -right-2 -bottom-2 h-20 w-20 rotate-12 text-primary-foreground/10" />
             </div>
@@ -149,17 +196,32 @@ function ProjectDetail() {
           <div className="mt-24">
             <div className="flex items-end justify-between">
               <h2 className="font-display text-2xl">More projects</h2>
-              <Link to="/" hash="work" className="text-sm text-primary hover:underline">View all</Link>
+              <Link to="/" hash="work" className="text-sm text-primary hover:underline">
+                View all
+              </Link>
             </div>
             <div className="mt-6 grid gap-5 sm:grid-cols-3">
               {others.map((o) => (
-                <Link key={o.id} to="/projects/$slug" params={{ slug: o.slug }} className="group overflow-hidden rounded-2xl border border-border bg-card shadow-soft transition-shadow hover:shadow-lift">
+                <Link
+                  key={o.id}
+                  to="/projects/$slug"
+                  params={{ slug: o.slug }}
+                  className="group overflow-hidden rounded-2xl border border-border bg-card shadow-soft transition-shadow hover:shadow-lift"
+                >
                   <div className="aspect-[4/3] overflow-hidden bg-secondary">
-                    {o.image && <img src={o.image} alt={o.title} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />}
+                    {o.image && (
+                      <img
+                        src={o.image}
+                        alt={o.title}
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                    )}
                   </div>
                   <div className="p-4">
                     <p className="font-display text-sm">{o.title}</p>
-                    <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{o.description}</p>
+                    <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
+                      {o.description}
+                    </p>
                   </div>
                 </Link>
               ))}
@@ -171,7 +233,15 @@ function ProjectDetail() {
   );
 }
 
-function Meta({ icon: Icon, label, value }: { icon: typeof Calendar; label: string; value: string }) {
+function Meta({
+  icon: Icon,
+  label,
+  value,
+}: {
+  icon: typeof Calendar;
+  label: string;
+  value: string;
+}) {
   return (
     <div className="rounded-2xl border border-border bg-card p-4">
       <p className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">

@@ -1,79 +1,58 @@
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import {
-  DEFAULTS,
-  type PortfolioContent,
-} from "./portfolio-content";
-
-export type DbProject = {
-  id: string;
-  slug: string;
-  title: string;
-  description: string;
-  image: string;
-  tags: string[];
-  category: string;
-  year: string;
-  role: string;
-  timeline: string;
-  overview: string;
-  problem: string;
-  solution: string;
-  highlights: string[];
-  stack: string[];
-  links: { label: string; href: string }[];
-  sort_order: number;
-  is_published: boolean;
-};
+import { DEFAULTS, type PortfolioContent, type DbProject } from "./portfolio-content";
+import { getSiteContent } from "./api/content.server";
 
 export function usePortfolioContent() {
   return useQuery({
     queryKey: ["site_content"],
     queryFn: async (): Promise<PortfolioContent> => {
-      const { data, error } = await supabase.from("site_content").select("key,value");
-      if (error) throw error;
-      const merged: PortfolioContent = JSON.parse(JSON.stringify(DEFAULTS));
-      for (const row of data ?? []) {
-        const key = row.key as keyof PortfolioContent;
-        if (key in merged && row.value) {
-          // shallow replace per top-level key
-          (merged as Record<string, unknown>)[key] = row.value;
+      try {
+        const dbContent = await getSiteContent();
+
+        // Merge db overrides into defaults
+        const merged = { ...DEFAULTS } as Record<string, unknown>;
+        if (dbContent && Array.isArray(dbContent)) {
+          dbContent.forEach((row) => {
+            if (row.key && row.value && merged[row.key] !== undefined) {
+              if (Array.isArray(row.value)) {
+                // If it's an array (like projects, skills, journey), completely overwrite
+                merged[row.key] = row.value;
+              } else if (typeof row.value === "object" && row.value !== null) {
+                // If it's an object (like hero, about), merge it
+                merged[row.key] = {
+                  ...(merged[row.key] as Record<string, unknown>),
+                  ...row.value,
+                };
+              } else {
+                merged[row.key] = row.value;
+              }
+            }
+          });
         }
+        return merged as unknown as PortfolioContent;
+      } catch (e) {
+        console.error("Failed to load portfolio content from DB, using defaults", e);
+        return DEFAULTS;
       }
-      return merged;
     },
-    staleTime: 60_000,
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 }
 
 export function useProjects() {
-  return useQuery({
-    queryKey: ["projects"],
-    queryFn: async (): Promise<DbProject[]> => {
-      const { data, error } = await supabase
-        .from("projects")
-        .select("*")
-        .order("sort_order", { ascending: true })
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      return (data ?? []) as unknown as DbProject[];
-    },
-    staleTime: 60_000,
-  });
+  const query = usePortfolioContent();
+  return {
+    ...query,
+    data: query.data?.projects
+      ? [...query.data.projects].sort((a, b) => a.sort_order - b.sort_order)
+      : [],
+  };
 }
 
 export function useProject(slug: string) {
-  return useQuery({
-    queryKey: ["projects", slug],
-    queryFn: async (): Promise<DbProject | null> => {
-      const { data, error } = await supabase
-        .from("projects")
-        .select("*")
-        .eq("slug", slug)
-        .maybeSingle();
-      if (error) throw error;
-      return (data as unknown as DbProject) ?? null;
-    },
-    staleTime: 60_000,
-  });
+  const query = usePortfolioContent();
+  return {
+    ...query,
+    data: query.data?.projects?.find((p) => p.slug === slug) ?? null,
+  };
 }
